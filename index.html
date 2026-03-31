@@ -144,8 +144,16 @@ textarea:focus { border-color: var(--teal); }
 
       <div class="card">
         <div class="card-title">Kalender-snapshot</div>
-        <textarea id="cal-input" rows="6" placeholder="Klistra in morgondagens agenda här..."></textarea>
-        <button class="save-btn secondary" onclick="saveCalendar()" style="width:100%;margin-top:8px">Spara snapshot</button>
+        <div id="cal-drop-zone" style="border:2px dashed var(--border2);border-radius:var(--radius-sm);padding:20px 12px;text-align:center;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;position:relative;">
+          <div style="font-size:13px;color:var(--text2);line-height:1.6">Klistra in skärmbild (Ctrl+V)<br>eller klicka för att ladda upp</div>
+          <input type="file" id="cal-file-input" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;" onchange="handleCalFile(event)" />
+        </div>
+        <div id="cal-preview" style="display:none;margin-bottom:8px;">
+          <img id="cal-img" style="width:100%;border-radius:var(--radius-sm);border:1px solid var(--border);" />
+        </div>
+        <button class="save-btn" id="cal-analyze-btn" onclick="analyzeCalendar()" style="width:100%;display:none;">Tolka med AI</button>
+        <div id="cal-loading" style="display:none;font-size:13px;color:var(--teal);text-align:center;padding:10px 0;">Analyserar kalender...</div>
+        <div id="cal-result" style="display:none;margin-top:10px;"></div>
         <div class="saved-note" id="cal-note"></div>
       </div>
     </div>
@@ -186,8 +194,12 @@ function hydrate() {
     if (n) nextId = parseInt(n) || 1;
     const plan = localStorage.getItem('acc2_plan');
     if (plan) document.getElementById('plan-text').value = plan;
-    const cal = localStorage.getItem('acc2_cal');
-    if (cal) { document.getElementById('cal-input').value = cal; document.getElementById('cal-note').textContent = 'Snapshot sparad.'; }
+    const calResult = localStorage.getItem('acc2_cal_result');
+    if (calResult) {
+      const el = document.getElementById('cal-result');
+      el.style.display = 'block';
+      el.innerHTML = '<div style="font-size:13px;line-height:1.7;color:var(--text);white-space:pre-wrap;border-top:1px solid var(--border);padding-top:10px;">' + escHtml(calResult) + '</div>';
+    }
   } catch(e) {}
 }
 
@@ -364,10 +376,76 @@ function savePlan() {
   setTimeout(() => n.classList.remove('pulse'), 600);
 }
 
-function saveCalendar() {
-  localStorage.setItem('acc2_cal', document.getElementById('cal-input').value);
-  const n = document.getElementById('cal-note');
-  n.textContent = 'Snapshot sparad ' + new Date().toLocaleTimeString('sv-SE', {hour:'2-digit',minute:'2-digit'});
+let calImageBase64 = null;
+let calImageType = null;
+
+function handleCalFile(event) {
+  const file = event.target.files[0];
+  if (file) loadCalImage(file);
+}
+
+function loadCalImage(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    calImageType = file.type || 'image/png';
+    calImageBase64 = dataUrl.split(',')[1];
+    document.getElementById('cal-img').src = dataUrl;
+    document.getElementById('cal-preview').style.display = 'block';
+    document.getElementById('cal-analyze-btn').style.display = 'block';
+    document.getElementById('cal-result').style.display = 'none';
+    document.getElementById('cal-note').textContent = '';
+  };
+  reader.readAsDataURL(file);
+}
+
+document.addEventListener('paste', (e) => {
+  const items = e.clipboardData && e.clipboardData.items;
+  if (!items) return;
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      const file = item.getAsFile();
+      if (file) { loadCalImage(file); break; }
+    }
+  }
+});
+
+async function analyzeCalendar() {
+  if (!calImageBase64) return;
+  document.getElementById('cal-loading').style.display = 'block';
+  document.getElementById('cal-analyze-btn').style.display = 'none';
+  document.getElementById('cal-result').style.display = 'none';
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: calImageType, data: calImageBase64 } },
+            { type: 'text', text: 'Detta är en skärmbild av min Outlook-kalender. Extrahera alla möten och händelser. Lista dem med tid och titel i kronologisk ordning. Identifiera sedan de 3 viktigaste prioriteringarna baserat på mötestyp och titel. Svara på svenska. Håll det kortfattat och strukturerat.' }
+          ]
+        }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content && data.content[0] && data.content[0].text;
+    if (text) {
+      const el = document.getElementById('cal-result');
+      el.style.display = 'block';
+      el.innerHTML = '<div style="font-size:13px;line-height:1.7;color:var(--text);white-space:pre-wrap;border-top:1px solid var(--border);padding-top:10px;">' + escHtml(text) + '</div>';
+      try { localStorage.setItem('acc2_cal_result', text); } catch(e) {}
+      document.getElementById('cal-note').textContent = 'Analyserad ' + new Date().toLocaleTimeString('sv-SE', {hour:'2-digit',minute:'2-digit'});
+    }
+  } catch(err) {
+    document.getElementById('cal-result').style.display = 'block';
+    document.getElementById('cal-result').innerHTML = '<div style="font-size:13px;color:#d94040;">Kunde inte analysera bilden. Kontrollera din anslutning.</div>';
+  }
+  document.getElementById('cal-loading').style.display = 'none';
+  document.getElementById('cal-analyze-btn').style.display = 'block';
 }
 
 function escHtml(s) {
