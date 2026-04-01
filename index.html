@@ -117,6 +117,17 @@ textarea:focus { border-color: var(--teal); }
 .note-entry-text { font-size: 13px; line-height: 1.5; }
 .note-entry-meta { font-size: 11px; color: var(--text2); margin-top: 3px; }
 .detail-section-title { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin: 14px 0 6px; }
+.prio-btn { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid transparent; cursor: pointer; flex-shrink: 0; transition: transform 0.1s; margin-top: 4px; }
+.prio-btn:hover { transform: scale(1.3); }
+.prio-high { background: #d94040; }
+.prio-med  { background: #e09000; }
+.prio-low  { background: #2d8a4e; }
+.prio-none { background: var(--bg3); border-color: var(--border2); }
+.todo-text-edit { font-size: 14px; color: var(--text); line-height: 1.4; width: 100%; background: var(--bg2); border: 1px solid var(--teal); border-radius: 4px; padding: 3px 7px; font-family: inherit; outline: none; resize: none; }
+.todo-edit-row { display: flex; gap: 6px; align-items: center; margin-top: 5px; flex-wrap: wrap; }
+.todo-edit-row select, .todo-edit-row input[type=date] { padding: 4px 7px; border: 1px solid var(--border2); border-radius: 4px; font-size: 12px; background: var(--bg2); color: var(--text); font-family: inherit; outline: none; }
+.save-inline { padding: 4px 12px; background: var(--teal); color: #fff; border: none; border-radius: 4px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; }
+.cancel-inline { padding: 4px 10px; background: transparent; color: var(--text2); border: 1px solid var(--border2); border-radius: 4px; font-size: 12px; cursor: pointer; font-family: inherit; }
 </style>
 </head>
 <body>
@@ -365,11 +376,16 @@ function renderList() {
   el.innerHTML='';
   items.forEach(todo => {
     const role=getRole(todo.role), over=isOverdue(todo);
-    const div=document.createElement('div'); div.className='todo-item';
-    div.innerHTML=`<div class="todo-check ${todo.done?'done':''}" onclick="toggleTodo(${todo.id})"></div>
+    const prio=todo.prio||'none';
+    const prioClass={'high':'prio-high','med':'prio-med','low':'prio-low','none':'prio-none'}[prio];
+    const prioTitle={'high':'Hög prioritet','med':'Medel prioritet','low':'Låg prioritet','none':'Sätt prioritet'}[prio];
+    const div=document.createElement('div'); div.className='todo-item'; div.dataset.id=todo.id;
+    div.innerHTML=`
+      <div class="todo-check ${todo.done?'done':''}" onclick="toggleTodo(${todo.id})"></div>
       <div class="todo-body">
-        <div class="todo-text ${todo.done?'done-text':''}">${escHtml(todo.text)}</div>
+        <div class="todo-text ${todo.done?'done-text':''}" onclick="startEdit(${todo.id})" style="cursor:text;" title="Klicka för att redigera">${escHtml(todo.text)}</div>
         <div class="todo-meta">
+          <div class="prio-btn ${prioClass}" onclick="cyclePrio(${todo.id})" title="${prioTitle}"></div>
           <span class="role-badge" style="background:${role.bg};color:${role.color}">${role.label}</span>
           ${todo.deadline?dlBadge(todo.deadline):''}
           <span class="age-badge ${over?'overdue':''}">${over?'⚠ ':''}${ageLabel(todo.created)} sedan</span>
@@ -399,7 +415,46 @@ function renderReminders() {
   aging.slice(0,4).forEach(t=>mk(t,'#e09000','var(--amber-bg)','Öppen mer än 4h — fortfarande aktuell?'));
 }
 
-function updateCounter() {
+function cyclePrio(id) {
+  const t = todos.find(t=>t.id===id); if(!t) return;
+  const order = ['none','high','med','low'];
+  t.prio = order[(order.indexOf(t.prio||'none')+1)%order.length];
+  persist(); render();
+}
+
+function startEdit(id) {
+  const t = todos.find(t=>t.id===id); if(!t||t.done) return;
+  const div = document.querySelector(`.todo-item[data-id="${id}"]`); if(!div) return;
+  const body = div.querySelector('.todo-body');
+  const role = getRole(t.role);
+  const roleOpts = ROLES.map(r=>`<option value="${r.id}"${r.id===t.role?' selected':''}>${r.label}</option>`).join('');
+  body.innerHTML = `
+    <textarea class="todo-text-edit" id="edit-text-${id}" rows="2">${escHtml(t.text)}</textarea>
+    <div class="todo-edit-row">
+      <select id="edit-role-${id}">${roleOpts}</select>
+      <input type="date" id="edit-dl-${id}" value="${t.deadline||''}" />
+      <button class="save-inline" onclick="saveEdit(${id})">Spara</button>
+      <button class="cancel-inline" onclick="render()">Avbryt</button>
+    </div>`;
+  const ta = document.getElementById('edit-text-'+id);
+  ta.focus(); ta.selectionStart = ta.selectionEnd = ta.value.length;
+  ta.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();saveEdit(id);} if(e.key==='Escape') render(); });
+}
+
+function saveEdit(id) {
+  const t = todos.find(t=>t.id===id); if(!t) return;
+  const text = (document.getElementById('edit-text-'+id)||{}).value||'';
+  const role = (document.getElementById('edit-role-'+id)||{}).value||t.role;
+  const dl   = (document.getElementById('edit-dl-'+id)||{}).value||'';
+  if(text.trim()) t.text = text.trim();
+  t.role = role;
+  if(dl) t.deadline = dl; else delete t.deadline;
+  if(areas[role]) areas[role].lastActive = Date.now();
+  persist(); render();
+  if(activeAreaId) renderAreaDetail(activeAreaId);
+}
+
+
   const v=document.getElementById('todo-input').value.length, left=300-v;
   const el=document.getElementById('char-counter');
   el.textContent=left+' tecken kvar';
