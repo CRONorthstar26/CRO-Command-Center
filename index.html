@@ -117,12 +117,16 @@ textarea:focus { border-color: var(--teal); }
 .note-entry-text { font-size: 13px; line-height: 1.5; }
 .note-entry-meta { font-size: 11px; color: var(--text2); margin-top: 3px; }
 .detail-section-title { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin: 14px 0 6px; }
-.prio-btn { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid transparent; cursor: pointer; flex-shrink: 0; transition: transform 0.1s; margin-top: 4px; }
-.prio-btn:hover { transform: scale(1.3); }
+.prio-btn { width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid transparent; cursor: pointer; flex-shrink: 0; transition: transform 0.1s; margin-top: 3px; }
+.prio-btn:hover { transform: scale(1.25); }
+.prio-btn::after { content: ''; }
 .prio-high { background: #d94040; }
 .prio-med  { background: #e09000; }
 .prio-low  { background: #2d8a4e; }
 .prio-none { background: var(--bg3); border-color: var(--border2); }
+.todo-item.p-high { border-left: 3px solid #d94040; padding-left: 8px; }
+.todo-item.p-med  { border-left: 3px solid #e09000; padding-left: 8px; }
+.todo-item.p-low  { border-left: 3px solid #2d8a4e; padding-left: 8px; }
 .todo-text-edit { font-size: 14px; color: var(--text); line-height: 1.4; width: 100%; background: var(--bg2); border: 1px solid var(--teal); border-radius: 4px; padding: 3px 7px; font-family: inherit; outline: none; resize: none; }
 .todo-edit-row { display: flex; gap: 6px; align-items: center; margin-top: 5px; flex-wrap: wrap; }
 .todo-edit-row select, .todo-edit-row input[type=date] { padding: 4px 7px; border: 1px solid var(--border2); border-radius: 4px; font-size: 12px; background: var(--bg2); color: var(--text); font-family: inherit; outline: none; }
@@ -149,6 +153,30 @@ textarea:focus { border-color: var(--teal); }
       <div class="stat-box"><div class="stat-num" id="stat-open">0</div><div class="stat-label">Öppna</div></div>
       <div class="stat-box"><div class="stat-num" id="stat-overdue" style="color:var(--red)">0</div><div class="stat-label">Försenade</div></div>
       <div class="stat-box"><div class="stat-num" id="stat-done">0</div><div class="stat-label">Klara idag</div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem;">
+      <div class="stat-box" style="border-top:3px solid #d94040;">
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:#d94040;flex-shrink:0;"></div>
+          <div class="stat-num" id="stat-high">0</div>
+        </div>
+        <div class="stat-label">Hög prioritet</div>
+      </div>
+      <div class="stat-box" style="border-top:3px solid #e09000;">
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:#e09000;flex-shrink:0;"></div>
+          <div class="stat-num" id="stat-med">0</div>
+        </div>
+        <div class="stat-label">Medel prioritet</div>
+      </div>
+      <div class="stat-box" style="border-top:3px solid #2d8a4e;">
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:#2d8a4e;flex-shrink:0;"></div>
+          <div class="stat-num" id="stat-low">0</div>
+        </div>
+        <div class="stat-label">Låg prioritet</div>
+      </div>
     </div>
 
     <div class="briefing-card">
@@ -367,6 +395,9 @@ function renderList() {
   });
   items.sort((a,b) => {
     if (a.done!==b.done) return a.done?1:-1;
+    const prioOrder = {high:0,med:1,low:2,none:3};
+    const pa=(prioOrder[a.prio||'none']||3), pb=(prioOrder[b.prio||'none']||3);
+    if (pa!==pb) return pa-pb;
     if (isOverdue(b)!==isOverdue(a)) return isOverdue(b)?1:-1;
     if (a.deadline&&b.deadline) return a.deadline.localeCompare(b.deadline);
     if (a.deadline) return -1; if (b.deadline) return 1;
@@ -378,8 +409,9 @@ function renderList() {
     const role=getRole(todo.role), over=isOverdue(todo);
     const prio=todo.prio||'none';
     const prioClass={'high':'prio-high','med':'prio-med','low':'prio-low','none':'prio-none'}[prio];
-    const prioTitle={'high':'Hög prioritet','med':'Medel prioritet','low':'Låg prioritet','none':'Sätt prioritet'}[prio];
-    const div=document.createElement('div'); div.className='todo-item'; div.dataset.id=todo.id;
+    const prioTitle={'high':'Hög prioritet — klicka för att ändra','med':'Medel prioritet — klicka för att ändra','low':'Låg prioritet — klicka för att ändra','none':'Ingen prioritet — klicka för att sätta'}[prio];
+    const borderClass={'high':'p-high','med':'p-med','low':'p-low','none':''}[prio];
+    const div=document.createElement('div'); div.className='todo-item'+(borderClass?' '+borderClass:''); div.dataset.id=todo.id;
     div.innerHTML=`
       <div class="todo-check ${todo.done?'done':''}" onclick="toggleTodo(${todo.id})"></div>
       <div class="todo-body">
@@ -397,9 +429,13 @@ function renderList() {
 }
 
 function renderStats() {
-  document.getElementById('stat-open').textContent    = todos.filter(t=>!t.done).length;
+  const open = todos.filter(t=>!t.done);
+  document.getElementById('stat-open').textContent    = open.length;
   document.getElementById('stat-overdue').textContent = todos.filter(t=>isOverdue(t)).length;
   document.getElementById('stat-done').textContent    = todos.filter(t=>t.done).length;
+  document.getElementById('stat-high').textContent    = open.filter(t=>t.prio==='high').length;
+  document.getElementById('stat-med').textContent     = open.filter(t=>t.prio==='med').length;
+  document.getElementById('stat-low').textContent     = open.filter(t=>t.prio==='low').length;
 }
 
 function renderReminders() {
