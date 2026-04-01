@@ -658,7 +658,7 @@ async function generateBriefing() {
   ].filter(Boolean).join('\n\n');
   try {
     const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:`Du är min personliga assistent och CRO-coach. Baserat på mina uppgifter och kalender, skriv en skarp handlingsorienterad briefing på svenska. Tre delar: 1) Omedelbar uppmärksamhet, 2) Fokus idag, 3) Kan vänta. Max 150 ord. Direkt, inga floskler.\n\n${lines}`}]})});
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,messages:[{role:'user',content:`Du är min personliga assistent och CRO-coach. Baserat på mina uppgifter och kalender, skriv en skarp handlingsorienterad briefing på svenska. Tre delar: 1) Omedelbar uppmärksamhet, 2) Fokus idag, 3) Kan vänta. Max 150 ord. Direkt, inga floskler.\n\n${lines}`}]})});
     const data=await resp.json(), text=data.content&&data.content[0]&&data.content[0].text;
     if(text){
       document.getElementById('briefing-text').textContent=text;
@@ -694,7 +694,7 @@ async function analyzeCalendar(){
   document.getElementById('cal-analyze-btn').style.display='none';
   try{
     const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,messages:[{role:'user',content:[
         {type:'image',source:{type:'base64',media_type:calImageType,data:calImageBase64}},
         {type:'text',text:'Detta är min Outlook-kalender. Lista alla möten med tid och titel kronologiskt. Identifiera sedan 3 viktigaste prioriteringar. Svenska. Kortfattat.'}
       ]}]})});
