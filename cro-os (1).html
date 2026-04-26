@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRO OS — Arctic Group × ID North</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --navy: #0E1B3D;
+    --navy-2: #15254E;
+    --navy-3: #1C2F62;
+    --teal: #0D9488;
+    --teal-2: #14B8A6;
+    --orange: #FFA73C;
+    --red: #DC2626;
+    --amber: #F59E0B;
+    --green: #10B981;
+    --paper: #F5F2EC;
+    --ink: #0A1024;
+    --line: rgba(255,255,255,0.08);
+    --line-2: rgba(255,255,255,0.14);
+  }
+  * { -webkit-font-smoothing: antialiased; }
+  html, body { background: var(--ink); color: #E8EBF2; font-family: 'Inter', sans-serif; }
+  .font-display { font-family: 'Fraunces', serif; font-feature-settings: 'ss01' on; letter-spacing: -0.02em; }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+  .grain {
+    background-image:
+      radial-gradient(ellipse at top left, rgba(13,148,136,0.08), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(255,167,60,0.04), transparent 50%);
+  }
+  .panel {
+    background: linear-gradient(180deg, rgba(21,37,78,0.6) 0%, rgba(14,27,61,0.6) 100%);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+  }
+  .panel-tight { background: rgba(21,37,78,0.4); border: 1px solid var(--line); }
+  .hairline { border-color: var(--line); }
+  .hairline-strong { border-color: var(--line-2); }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 2px 8px; border-radius: 999px; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1px solid var(--line-2);
+  }
+  .status-green { background: rgba(16,185,129,0.12); color: #6EE7B7; border-color: rgba(16,185,129,0.4); }
+  .status-amber { background: rgba(245,158,11,0.12); color: #FCD34D; border-color: rgba(245,158,11,0.4); }
+  .status-red { background: rgba(220,38,38,0.14); color: #FCA5A5; border-color: rgba(220,38,38,0.45); }
+  .status-grey { background: rgba(148,163,184,0.10); color: #CBD5E1; border-color: rgba(148,163,184,0.3); }
+  .dot { width: 8px; height: 8px; border-radius: 999px; display: inline-block; }
+  .dot-green { background: var(--green); box-shadow: 0 0 12px rgba(16,185,129,0.6); }
+  .dot-amber { background: var(--amber); box-shadow: 0 0 12px rgba(245,158,11,0.6); }
+  .dot-red { background: var(--red); box-shadow: 0 0 12px rgba(220,38,38,0.6); }
+  .dot-grey { background: #64748B; }
+  .tab-active {
+    background: rgba(13,148,136,0.12);
+    color: #5EEAD4;
+    border-bottom: 2px solid var(--teal-2);
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500;
+    transition: all 0.15s; cursor: pointer; border: 1px solid transparent;
+  }
+  .btn-primary { background: var(--teal); color: white; }
+  .btn-primary:hover { background: var(--teal-2); }
+  .btn-ghost { background: transparent; border-color: var(--line-2); color: #CBD5E1; }
+  .btn-ghost:hover { border-color: var(--teal); color: #5EEAD4; }
+  .btn-danger { background: transparent; border-color: rgba(220,38,38,0.5); color: #FCA5A5; }
+  .btn-danger:hover { background: rgba(220,38,38,0.15); }
+  input, textarea, select {
+    background: rgba(10,16,36,0.6); border: 1px solid var(--line-2); color: #E8EBF2;
+    border-radius: 6px; padding: 6px 10px; font-size: 13px;
+    font-family: 'Inter', sans-serif;
+  }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--teal); }
+  textarea { font-family: 'Inter', sans-serif; }
+  .scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 3px; }
+  .modal-bg { background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
+  .accent-bar { width: 3px; background: var(--teal); border-radius: 2px; }
+  .accent-bar-orange { background: var(--orange); }
+  .accent-bar-red { background: var(--red); }
+  .number-xl { font-family: 'Fraunces', serif; font-weight: 700; font-size: 44px; line-height: 1; letter-spacing: -0.04em; }
+  .label-xs { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #94A3B8; }
+  .marker {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748B;
+    letter-spacing: 0.1em;
+  }
+  details summary { list-style: none; cursor: pointer; }
+  details summary::-webkit-details-marker { display: none; }
+  .chevron { transition: transform 0.2s; }
+  details[open] .chevron { transform: rotate(90deg); }
+  .ascii-line {
+    font-family: 'JetBrains Mono', monospace; color: #334155;
+    font-size: 10px; letter-spacing: 0; user-select: none;
+  }
+  .row-hover:hover { background: rgba(13,148,136,0.05); }
+  .briefing-box {
+    background: linear-gradient(135deg, rgba(13,148,136,0.10), rgba(255,167,60,0.05));
+    border: 1px solid rgba(13,148,136,0.3);
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeIn 0.3s ease-out; }
+  @keyframes pulse-soft { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+  .pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
+</style>
+</head>
+<body class="grain min-h-screen">
+
+<!-- =============== HEADER =============== -->
+<header class="border-b hairline-strong">
+  <div class="max-w-[1600px] mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-2 h-8" style="background: var(--teal);"></div>
+        <div>
+          <div class="font-display text-2xl font-bold tracking-tight">CRO <span style="color: var(--teal-2);">OS</span></div>
+          <div class="marker">ARCTIC GROUP × ID NORTH · NORTHSTAR</div>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="text-right">
+        <div class="label-xs" id="today-date"></div>
+        <div class="font-mono text-xs text-slate-400" id="today-time"></div>
+      </div>
+      <button onclick="exportData()" class="btn btn-ghost" title="Exportera data">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Export
+      </button>
+      <button onclick="document.getElementById('import-file').click()" class="btn btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+        Import
+      </button>
+      <input id="import-file" type="file" accept=".json" class="hidden" onchange="importData(event)">
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="max-w-[1600px] mx-auto px-6 flex items-center gap-1">
+    <button class="tab px-4 py-3 text-sm font-medium tab-active" data-tab="dashboard">
+      <span class="marker mr-2">01</span>Dashboard
+    </button>
+    <button class="tab px-4 py-3 text-sm font-medium text-slate-400 hover:text-white" data-tab="forums">
+      <span class="marker mr-2">02</span>Forum
+    </button>
+    <button class="tab px-4 py-3 text-sm font-medium text-slate-400 hover:text-white" data-tab="synks">
+      <span class="marker mr-2">03</span>Operationella synkar
+    </button>
+    <button class="tab px-4 py-3 text-sm font-medium text-slate-400 hover:text-white" data-tab="reports">
+      <span class="marker mr-2">04</span>Personalansvar
+    </button>
+    <button class="tab px-4 py-3 text-sm font-medium text-slate-400 hover:text-white" data-tab="actions">
+      <span class="marker mr-2">05</span>Actions
+    </button>
+    <button class="tab px-4 py-3 text-sm font-medium text-slate-400 hover:text-white" data-tab="week">
+      <span class="marker mr-2">06</span>Veckovy
+    </button>
+    <button class="tab px-4 py-3 text-sm font-medium text-slate-400 hover:text-white" data-tab="settings">
+      <span class="marker mr-2">07</span>Inställningar
+    </button>
+  </div>
+</header>
+
+<main class="max-w-[1600px] mx-auto px-6 py-8">
+
+  <!-- ====================================================== -->
+  <!-- TAB: DASHBOARD                                          -->
+  <!-- ====================================================== -->
+  <section id="tab-dashboard" class="tab-content">
+
+    <!-- Hero strip -->
+    <div class="grid grid-cols-12 gap-4 mb-6">
+      <div class="col-span-12 lg:col-span-8 panel rounded-lg p-6 relative overflow-hidden">
+        <div class="absolute top-0 right-0 ascii-line p-3 select-none">
+          ┌─────────┐<br>│ CRO OS  │<br>│  v1.0   │<br>└─────────┘
+        </div>
+        <div class="label-xs mb-2">Daglig briefing</div>
+        <h1 class="font-display text-3xl font-bold leading-tight mb-1">God morgon, Anders.</h1>
+        <p class="text-slate-400 text-sm mb-5" id="today-summary">Laddar översikt…</p>
+
+        <div class="briefing-box rounded-lg p-4 mb-4">
+          <div class="flex items-center justify-between mb-2">
+            <div class="label-xs" style="color: #5EEAD4;">▸ Top 5 idag</div>
+            <button onclick="generateBriefing()" class="btn btn-ghost text-xs">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-6.22-8.56"/><path d="M21 3v6h-6"/></svg>
+              AI-briefing
+            </button>
+          </div>
+          <ol id="top5-list" class="space-y-2 text-sm"></ol>
+        </div>
+
+        <div id="ai-briefing" class="hidden briefing-box rounded-lg p-4 fade-in">
+          <div class="label-xs mb-2" style="color: #FCD34D;">▸ AI-briefing</div>
+          <div id="ai-briefing-text" class="text-sm text-slate-200 leading-relaxed whitespace-pre-wrap"></div>
+        </div>
+      </div>
+
+      <div class="col-span-12 lg:col-span-4 grid grid-cols-2 gap-4">
+        <div class="panel rounded-lg p-4">
+          <div class="label-xs mb-2">Forum</div>
+          <div class="number-xl" id="metric-forums" style="color: var(--teal-2);">—</div>
+          <div class="text-xs text-slate-400 mt-2"><span id="metric-forums-overdue" class="text-red-400">0</span> försenade</div>
+        </div>
+        <div class="panel rounded-lg p-4">
+          <div class="label-xs mb-2">Op. synkar</div>
+          <div class="number-xl" id="metric-synks" style="color: var(--orange);">—</div>
+          <div class="text-xs text-slate-400 mt-2"><span id="metric-synks-overdue" class="text-red-400">0</span> försenade</div>
+        </div>
+        <div class="panel rounded-lg p-4">
+          <div class="label-xs mb-2">Direktrapp.</div>
+          <div class="number-xl" id="metric-reports">—</div>
+          <div class="text-xs text-slate-400 mt-2"><span id="metric-reports-overdue" class="text-amber-400">0</span> 1:1 försenat</div>
+        </div>
+        <div class="panel rounded-lg p-4">
+          <div class="label-xs mb-2">Öppna actions</div>
+          <div class="number-xl" id="metric-actions">—</div>
+          <div class="text-xs text-slate-400 mt-2"><span id="metric-actions-blocking" class="text-red-400">0</span> blockerande</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cadence heat -->
+    <div class="grid grid-cols-12 gap-4 mb-6">
+      <div class="col-span-12 lg:col-span-7 panel rounded-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <div class="label-xs">Cadence-status</div>
+            <h2 class="font-display text-xl font-semibold">Vilka forum slipper igenom?</h2>
+          </div>
+          <div class="flex items-center gap-3 text-xs">
+            <span class="flex items-center gap-1"><span class="dot dot-green"></span>I fas</span>
+            <span class="flex items-center gap-1"><span class="dot dot-amber"></span>Snart</span>
+            <span class="flex items-center gap-1"><span class="dot dot-red"></span>Försenad</span>
+          </div>
+        </div>
+        <div id="cadence-grid" class="grid grid-cols-2 md:grid-cols-3 gap-2"></div>
+      </div>
+
+      <div class="col-span-12 lg:col-span-5 panel rounded-lg p-6">
+        <div class="label-xs mb-1">Workstream-fördelning</div>
+        <h2 class="font-display text-xl font-semibold mb-4">Var ligger tyngden?</h2>
+        <div id="workstream-bars" class="space-y-3"></div>
+      </div>
+    </div>
+
+    <!-- Heads-up -->
+    <div class="panel rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <div class="label-xs">Heads-up</div>
+          <h2 class="font-display text-xl font-semibold">Det här kan brännas idag</h2>
+        </div>
+      </div>
+      <div id="heads-up-list" class="space-y-2"></div>
+    </div>
+
+  </section>
+
+  <!-- ====================================================== -->
+  <!-- TAB: FORUMS                                             -->
+  <!-- ====================================================== -->
+  <section id="tab-forums" class="tab-content hidden">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <div class="label-xs">Nivå 1</div>
+        <h2 class="font-display text-3xl font-bold">Forum</h2>
+        <p class="text-sm text-slate-400 mt-1">Där beslut fattas eller drivs framåt.</p>
+      </div>
+      <button onclick="openEntityModal('forum')" class="btn btn-primary">+ Nytt forum</button>
+    </div>
+    <div id="forums-list" class="space-y-3"></div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!-- TAB: SYNKS                                              -->
+  <!-- ====================================================== -->
+  <section id="tab-synks" class="tab-content hidden">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <div class="label-xs">Nivå 2</div>
+        <h2 class="font-display text-3xl font-bold">Operationella synkar</h2>
+        <p class="text-sm text-slate-400 mt-1">Där du hämtar och lämnar info.</p>
+      </div>
+      <button onclick="openEntityModal('synk')" class="btn btn-primary">+ Ny synk</button>
+    </div>
+    <div id="synks-list" class="space-y-3"></div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!-- TAB: REPORTS                                            -->
+  <!-- ====================================================== -->
+  <section id="tab-reports" class="tab-content hidden">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <div class="label-xs">Nivå 3</div>
+        <h2 class="font-display text-3xl font-bold">Personalansvar</h2>
+        <p class="text-sm text-slate-400 mt-1">Där du leder människor.</p>
+      </div>
+      <button onclick="openEntityModal('report')" class="btn btn-primary">+ Ny direktrapp.</button>
+    </div>
+    <div id="reports-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!-- TAB: ACTIONS                                            -->
+  <!-- ====================================================== -->
+  <section id="tab-actions" class="tab-content hidden">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <div class="label-xs">Konsoliderad lista</div>
+        <h2 class="font-display text-3xl font-bold">Actions</h2>
+        <p class="text-sm text-slate-400 mt-1">Allt öppet, taggat till forum/synk/person.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <select id="action-filter-status" onchange="renderActions()">
+          <option value="open">Öppna</option>
+          <option value="all">Alla</option>
+          <option value="done">Klara</option>
+        </select>
+        <select id="action-filter-entity" onchange="renderActions()">
+          <option value="all">Alla entiteter</option>
+        </select>
+        <button onclick="openActionModal()" class="btn btn-primary">+ Ny action</button>
+      </div>
+    </div>
+    <div id="actions-list" class="space-y-2"></div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!-- TAB: WEEK VIEW                                          -->
+  <!-- ====================================================== -->
+  <section id="tab-week" class="tab-content hidden">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <div class="label-xs">Veckodisciplin</div>
+        <h2 class="font-display text-3xl font-bold">Måndag → Fredag</h2>
+        <p class="text-sm text-slate-400 mt-1">Planering på måndag, avstämning på fredag.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="changeWeek(-1)" class="btn btn-ghost">←</button>
+        <div id="week-label" class="font-mono text-sm px-3"></div>
+        <button onclick="changeWeek(1)" class="btn btn-ghost">→</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="panel rounded-lg p-6">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="dot dot-green"></span>
+          <div class="label-xs">Måndag · Plan</div>
+        </div>
+        <h3 class="font-display text-lg font-semibold mb-3">Vad ska veckan leverera?</h3>
+        <textarea id="week-plan" rows="10" class="w-full" placeholder="3 saker som måste landa denna vecka:&#10;1.&#10;2.&#10;3.&#10;&#10;Kritiska forum:&#10;&#10;Risker:"></textarea>
+      </div>
+      <div class="panel rounded-lg p-6">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="dot dot-amber"></span>
+          <div class="label-xs">Fredag · Avstämning</div>
+        </div>
+        <h3 class="font-display text-lg font-semibold mb-3">Vad blev gjort, vad släpar?</h3>
+        <textarea id="week-review" rows="10" class="w-full" placeholder="Levererat:&#10;&#10;Släpar (varför?):&#10;&#10;Tar med till nästa vecka:"></textarea>
+      </div>
+    </div>
+
+    <!-- Outlook screenshot import -->
+    <div class="mt-4 panel rounded-lg p-6">
+      <div class="flex items-start justify-between mb-3 gap-4">
+        <div>
+          <div class="label-xs" style="color: #FCD34D;">▸ Outlook-import</div>
+          <h3 class="font-display text-lg font-semibold">Skärmdump → matchning mot dina forum</h3>
+          <p class="text-xs text-slate-400 mt-1">Klistra in (Cmd/Ctrl+V) eller dra in en skärmdump av Outlook-veckan. AI:n läser ut mötena och föreslår uppdateringar du godkänner en-och-en.</p>
+        </div>
+        <button onclick="document.getElementById('outlook-file').click()" class="btn btn-ghost text-xs whitespace-nowrap">Välj fil…</button>
+        <input id="outlook-file" type="file" accept="image/*" class="hidden" onchange="handleOutlookFile(event)">
+      </div>
+      <div id="outlook-dropzone" class="rounded border-2 border-dashed hairline-strong p-8 text-center transition cursor-pointer hover:border-teal-500/60">
+        <svg class="mx-auto mb-3 text-slate-500" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+        <div class="text-sm text-slate-300">Klistra in skärmdump här</div>
+        <div class="text-xs text-slate-500 mt-1">eller dra och släpp en bild · eller välj fil ovan</div>
+      </div>
+      <div id="outlook-preview" class="hidden mt-4">
+        <div class="flex items-center justify-between mb-2">
+          <div class="label-xs">Inläst bild</div>
+          <button onclick="clearOutlookImage()" class="text-xs text-slate-500 hover:text-red-400">Ta bort</button>
+        </div>
+        <img id="outlook-image" class="rounded max-h-64 border hairline-strong" alt="Outlook screenshot">
+        <button onclick="parseOutlookImage()" class="btn btn-primary mt-3">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-6.22-8.56"/><path d="M21 3v6h-6"/></svg>
+          Läs ut möten med AI
+        </button>
+        <span id="outlook-status" class="ml-3 text-xs text-slate-400"></span>
+      </div>
+    </div>
+
+    <div class="mt-4 panel rounded-lg p-6">
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <div class="label-xs">Forum denna vecka</div>
+          <h3 class="font-display text-lg font-semibold">Bokade möten i CRO OS</h3>
+        </div>
+        <button onclick="saveWeek()" class="btn btn-primary">Spara vecka</button>
+      </div>
+      <div id="week-forums" class="text-sm text-slate-300 space-y-1"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!-- TAB: SETTINGS                                           -->
+  <!-- ====================================================== -->
+  <section id="tab-settings" class="tab-content hidden">
+    <div class="mb-6">
+      <div class="label-xs">Konfiguration</div>
+      <h2 class="font-display text-3xl font-bold">Inställningar</h2>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="panel rounded-lg p-6">
+        <h3 class="font-display text-lg font-semibold mb-3">Anthropic API-nyckel</h3>
+        <p class="text-xs text-slate-400 mb-3">Används för AI-briefing. Sparas lokalt i din webbläsare. Lämna tomt för att inaktivera.</p>
+        <input id="api-key" type="password" class="w-full mb-3" placeholder="sk-ant-...">
+        <button onclick="saveApiKey()" class="btn btn-primary">Spara nyckel</button>
+      </div>
+      <div class="panel rounded-lg p-6">
+        <h3 class="font-display text-lg font-semibold mb-3">Data</h3>
+        <p class="text-xs text-slate-400 mb-3">All data lagras lokalt med prefix <span class="font-mono text-teal-400">acc3_cro_</span>.</p>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="exportData()" class="btn btn-ghost">Exportera JSON</button>
+          <button onclick="document.getElementById('import-file-2').click()" class="btn btn-ghost">Importera JSON</button>
+          <input id="import-file-2" type="file" accept=".json" class="hidden" onchange="importData(event)">
+          <button onclick="seedDemoData()" class="btn btn-ghost">Återställ till mall</button>
+          <button onclick="resetAll()" class="btn btn-danger">Rensa allt</button>
+        </div>
+      </div>
+      <div class="panel rounded-lg p-6 lg:col-span-2">
+        <h3 class="font-display text-lg font-semibold mb-3">Workstreams</h3>
+        <p class="text-xs text-slate-400 mb-3">Tagga forum/actions till workstream för att se var tyngden ligger.</p>
+        <div id="workstreams-editor" class="flex flex-wrap gap-2 mb-3"></div>
+        <div class="flex gap-2">
+          <input id="new-workstream" placeholder="Ny workstream…" class="flex-1">
+          <button onclick="addWorkstream()" class="btn btn-primary">Lägg till</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- =============== ENTITY MODAL =============== -->
+<div id="entity-modal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center p-4">
+  <div class="panel rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto scrollbar">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="font-display text-xl font-semibold" id="entity-modal-title">Nytt forum</h3>
+      <button onclick="closeEntityModal()" class="text-slate-400 hover:text-white">✕</button>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <div class="label-xs mb-1">Namn</div>
+        <input id="ent-name" class="w-full" placeholder="t.ex. Northstar workstreams">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <div class="label-xs mb-1">Cadence</div>
+          <select id="ent-cadence" class="w-full">
+            <option value="weekly">Veckovis</option>
+            <option value="biweekly">Varannan vecka</option>
+            <option value="monthly">Månadsvis</option>
+            <option value="quarterly">Kvartalsvis</option>
+            <option value="adhoc">Ad hoc</option>
+          </select>
+        </div>
+        <div>
+          <div class="label-xs mb-1">Nästa möte</div>
+          <input id="ent-next" type="date" class="w-full">
+        </div>
+      </div>
+      <div>
+        <div class="label-xs mb-1">Senast genomförd</div>
+        <input id="ent-last" type="date" class="w-full">
+      </div>
+      <div>
+        <div class="label-xs mb-1">Mitt ansvar (1 mening)</div>
+        <textarea id="ent-resp" rows="2" class="w-full" placeholder="t.ex. Representera sales/GTM mot PL Stardust"></textarea>
+      </div>
+      <div>
+        <div class="label-xs mb-1">Workstream</div>
+        <select id="ent-workstream" class="w-full"></select>
+      </div>
+      <div>
+        <div class="label-xs mb-1">Roll/titel (frivilligt — för synkar/personer)</div>
+        <input id="ent-role" class="w-full" placeholder="t.ex. CFO, Sales Coordinator">
+      </div>
+      <div>
+        <div class="label-xs mb-1">Anteckningar</div>
+        <textarea id="ent-notes" rows="3" class="w-full"></textarea>
+      </div>
+    </div>
+    <div class="flex justify-between mt-6 pt-4 border-t hairline">
+      <button onclick="deleteEntity()" id="ent-delete-btn" class="btn btn-danger hidden">Ta bort</button>
+      <div class="flex gap-2 ml-auto">
+        <button onclick="closeEntityModal()" class="btn btn-ghost">Avbryt</button>
+        <button onclick="saveEntity()" class="btn btn-primary">Spara</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =============== ACTION MODAL =============== -->
+<div id="action-modal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center p-4">
+  <div class="panel rounded-lg max-w-xl w-full p-6">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="font-display text-xl font-semibold" id="action-modal-title">Ny action</h3>
+      <button onclick="closeActionModal()" class="text-slate-400 hover:text-white">✕</button>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <div class="label-xs mb-1">Vad ska göras?</div>
+        <input id="act-title" class="w-full">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <div class="label-xs mb-1">Deadline</div>
+          <input id="act-due" type="date" class="w-full">
+        </div>
+        <div>
+          <div class="label-xs mb-1">Prioritet</div>
+          <select id="act-priority" class="w-full">
+            <option value="high">Hög — blockerar andra</option>
+            <option value="medium">Medel</option>
+            <option value="low">Låg</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div class="label-xs mb-1">Kopplad till entitet</div>
+        <select id="act-entity" class="w-full"></select>
+      </div>
+      <div>
+        <div class="label-xs mb-1">Anteckning</div>
+        <textarea id="act-notes" rows="3" class="w-full"></textarea>
+      </div>
+    </div>
+    <div class="flex justify-between mt-6 pt-4 border-t hairline">
+      <button onclick="deleteAction()" id="act-delete-btn" class="btn btn-danger hidden">Ta bort</button>
+      <div class="flex gap-2 ml-auto">
+        <button onclick="closeActionModal()" class="btn btn-ghost">Avbryt</button>
+        <button onclick="saveAction()" class="btn btn-primary">Spara</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =============== OUTLOOK REVIEW MODAL =============== -->
+<div id="outlook-review-modal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center p-4">
+  <div class="panel rounded-lg max-w-3xl w-full p-6 max-h-[90vh] flex flex-col">
+    <div class="flex items-center justify-between mb-2">
+      <div>
+        <div class="label-xs" style="color: #FCD34D;">▸ Granska AI-förslag</div>
+        <h3 class="font-display text-xl font-semibold">Hittade möten i skärmdumpen</h3>
+      </div>
+      <button onclick="closeOutlookReview()" class="text-slate-400 hover:text-white">✕</button>
+    </div>
+    <p class="text-xs text-slate-400 mb-4">Granska varje möte. Justera matchningen om AI:n gissat fel. Bocka av de du inte vill importera. Inget skrivs förrän du klickar "Tillämpa".</p>
+    <div id="outlook-review-list" class="flex-1 overflow-y-auto scrollbar pr-2 space-y-2"></div>
+    <div class="flex justify-between mt-4 pt-4 border-t hairline">
+      <div class="text-xs text-slate-400 self-center" id="outlook-review-summary"></div>
+      <div class="flex gap-2">
+        <button onclick="closeOutlookReview()" class="btn btn-ghost">Avbryt</button>
+        <button onclick="applyOutlookReview()" class="btn btn-primary">Tillämpa valda</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =====================================================
+   STORAGE
+   ===================================================== */
+const PREFIX = 'acc3_cro_';
+const KEYS = {
+  forums: PREFIX + 'forums',
+  synks: PREFIX + 'synks',
+  reports: PREFIX + 'reports',
+  actions: PREFIX + 'actions',
+  weeks: PREFIX + 'weeks',
+  workstreams: PREFIX + 'workstreams',
+  apiKey: PREFIX + 'apikey',
+  initd: PREFIX + 'seeded_v1'
+};
+
+function loadArr(key) { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { return []; } }
+function loadObj(key) { try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { return {}; } }
+function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+/* =====================================================
+   SEED DATA — based on the notebook page
+   ===================================================== */
+function seedDemoData() {
+  const today = new Date();
+  const fmt = d => d.toISOString().split('T')[0];
+  const daysFromNow = (n) => { const d = new Date(today); d.setDate(d.getDate() + n); return fmt(d); };
+
+  const forums = [
+    { id: uid(), name: 'TET', cadence: 'weekly', nextMeeting: daysFromNow(3), lastMeeting: daysFromNow(-4), responsibility: 'Nya ledningsgruppen för Northstar-fusionen', workstream: 'Northstar', role: '', notes: '' },
+    { id: uid(), name: 'Northstar workstreams', cadence: 'weekly', nextMeeting: daysFromNow(2), lastMeeting: daysFromNow(-5), responsibility: 'Representera sales/GTM och partners; löpande sync med PL Stardust', workstream: 'Northstar', role: '', notes: '' },
+    { id: uid(), name: 'Salesteam', cadence: 'weekly', nextMeeting: daysFromNow(1), lastMeeting: daysFromNow(-6), responsibility: 'Teamlead, 1:1, personalutv-plan, strategi/uppföljning, stöd', workstream: 'Sales', role: '', notes: '' },
+    { id: uid(), name: 'Internt Partner Adv. Board', cadence: 'monthly', nextMeeting: daysFromNow(12), lastMeeting: daysFromNow(-18), responsibility: 'Strategi och riktning gällande partnerskap', workstream: 'Partners', role: '', notes: '' },
+    { id: uid(), name: 'Bid team', cadence: 'weekly', nextMeeting: daysFromNow(2), lastMeeting: daysFromNow(-5), responsibility: 'GO/NO-GO-beslut, löpande arbete med RFP/RFI, strategi från Partner Adv. Board', workstream: 'Sales', role: '', notes: '' },
+    { id: uid(), name: 'Commercial Council', cadence: 'biweekly', nextMeeting: daysFromNow(6), lastMeeting: daysFromNow(-8), responsibility: 'Paketering/ompaketering av tjänster', workstream: 'Sales', role: '', notes: '' },
+    { id: uid(), name: 'Identity Day', cadence: 'monthly', nextMeeting: daysFromNow(20), lastMeeting: daysFromNow(-30), responsibility: 'Stora identitetsevent Stockholm/Helsingfors 2027 i Köpenhamn — sponsorer & exekvering', workstream: 'Brand', role: '', notes: '' },
+    { id: uid(), name: 'Allunity Sales Hub', cadence: 'weekly', nextMeeting: daysFromNow(4), lastMeeting: daysFromNow(-3), responsibility: 'Ansvarig deltagare på löpande möten och brygga mellan Allunity / Northstar', workstream: 'Sales', role: '', notes: '' },
+    { id: uid(), name: 'Sälj/Leverans-forum', cadence: 'weekly', nextMeeting: daysFromNow(2), lastMeeting: daysFromNow(-5), responsibility: 'Sync tillgängliga resurser och affärer som är TBTC', workstream: 'Sales', role: '', notes: '' },
+    { id: uid(), name: 'Partneransvarig (Ping/SailPoint/One Identity)', cadence: 'monthly', nextMeeting: daysFromNow(15), lastMeeting: daysFromNow(-15), responsibility: 'Advisory board hos Ping, SailPoint, One Identity', workstream: 'Partners', role: '', notes: '' },
+    { id: uid(), name: 'Brandinggruppen', cadence: 'biweekly', nextMeeting: daysFromNow(7), lastMeeting: daysFromNow(-7), responsibility: 'Arbete med nytt varumärke — lansering Q3', workstream: 'Brand', role: '', notes: '' },
+    { id: uid(), name: 'Finland (Sanna)', cadence: 'biweekly', nextMeeting: daysFromNow(5), lastMeeting: daysFromNow(-9), responsibility: 'Country manager — löpande sync, egen P&L, strategi & riktning', workstream: 'Geo', role: '', notes: '' }
+  ];
+
+  const synks = [
+    { id: uid(), name: 'CFO', cadence: 'biweekly', nextMeeting: daysFromNow(4), lastMeeting: daysFromNow(-10), responsibility: 'Pipeline, forecast, kommersiella villkor', workstream: 'Finance', role: 'CFO', notes: '' },
+    { id: uid(), name: 'COO', cadence: 'biweekly', nextMeeting: daysFromNow(8), lastMeeting: daysFromNow(-6), responsibility: 'Operativa flöden mellan sales och delivery', workstream: 'Operations', role: 'COO', notes: '' },
+    { id: uid(), name: 'CEO', cadence: 'weekly', nextMeeting: daysFromNow(2), lastMeeting: daysFromNow(-5), responsibility: 'Strategisk avstämning, escalations', workstream: 'Northstar', role: 'CEO', notes: '' },
+    { id: uid(), name: 'DCEO', cadence: 'biweekly', nextMeeting: daysFromNow(9), lastMeeting: daysFromNow(-5), responsibility: 'Northstar-integration', workstream: 'Northstar', role: 'DCEO', notes: '' },
+    { id: uid(), name: 'Marketing', cadence: 'weekly', nextMeeting: daysFromNow(3), lastMeeting: daysFromNow(-4), responsibility: 'Kampanjer, content, branding', workstream: 'Brand', role: 'CMO/Marketing', notes: '' },
+    { id: uid(), name: 'ITSM', cadence: 'monthly', nextMeeting: daysFromNow(18), lastMeeting: daysFromNow(-12), responsibility: 'Service management — linje mot delivery', workstream: 'Operations', role: 'ITSM', notes: '' },
+    { id: uid(), name: 'PL Stardust', cadence: 'weekly', nextMeeting: daysFromNow(1), lastMeeting: daysFromNow(-6), responsibility: 'Northstar projektledning — sync mot workstreams', workstream: 'Northstar', role: 'PL Stardust', notes: '' },
+    { id: uid(), name: 'Project / Service delivery', cadence: 'biweekly', nextMeeting: daysFromNow(7), lastMeeting: daysFromNow(-7), responsibility: 'Kvalitet, leveransrisk, kundnöjdhet', workstream: 'Operations', role: 'Delivery lead', notes: '' }
+  ];
+
+  const reports = [
+    { id: uid(), name: 'Sofi R',    cadence: 'biweekly', nextMeeting: daysFromNow(5),  lastMeeting: daysFromNow(-9),  responsibility: '1:1 + utvecklingsplan',           workstream: 'Sales',  role: 'Sales Coordinator',                  notes: '' },
+    { id: uid(), name: 'Sofie B',   cadence: 'biweekly', nextMeeting: daysFromNow(6),  lastMeeting: daysFromNow(-8),  responsibility: '1:1 + utvecklingsplan',           workstream: 'Sales',  role: 'AM (snart KAM)',                     notes: '' },
+    { id: uid(), name: 'Dan',       cadence: 'biweekly', nextMeeting: daysFromNow(3),  lastMeeting: daysFromNow(-11), responsibility: '1:1 + utvecklingsplan',           workstream: 'Sales',  role: 'AM (snart Lead New Business)',       notes: '' },
+    { id: uid(), name: 'Martin',    cadence: 'biweekly', nextMeeting: daysFromNow(4),  lastMeeting: daysFromNow(-10), responsibility: '1:1 + utvecklingsplan',           workstream: 'Sales',  role: 'LIA (snart AM)',                     notes: '' },
+    { id: uid(), name: 'Käbi',      cadence: 'biweekly', nextMeeting: daysFromNow(2),  lastMeeting: daysFromNow(-12), responsibility: '1:1 + utvecklingsplan',           workstream: 'Sales',  role: 'KAM (snart Lead Public Sector)',     notes: '' },
+    { id: uid(), name: 'Petter',    cadence: 'biweekly', nextMeeting: daysFromNow(7),  lastMeeting: daysFromNow(-7),  responsibility: '1:1 + utvecklingsplan',           workstream: 'Sales',  role: 'KAM (snart Lead Existing Customer)', notes: '' },
+    { id: uid(), name: 'Carl',      cadence: 'biweekly', nextMeeting: daysFromNow(8),  lastMeeting: daysFromNow(-6),  responsibility: '1:1 + utvecklingsplan',           workstream: 'Sales',  role: 'AE — Account Executive',             notes: '' },
+    { id: uid(), name: 'Therese',   cadence: 'biweekly', nextMeeting: daysFromNow(1),  lastMeeting: daysFromNow(-13), responsibility: '1:1 + utvecklingsplan',           workstream: 'Sales',  role: 'AE idag, förflytt till AM Public',   notes: '' },
+    { id: uid(), name: 'Kelly',     cadence: 'biweekly', nextMeeting: daysFromNow(6),  lastMeeting: daysFromNow(-8),  responsibility: '1:1 + utvecklingsplan',           workstream: 'Partners', role: 'Growth and Partner Manager',       notes: '' }
+  ];
+
+  const workstreams = ['Northstar', 'Sales', 'Partners', 'Brand', 'Geo', 'Finance', 'Operations'];
+
+  save(KEYS.forums, forums);
+  save(KEYS.synks, synks);
+  save(KEYS.reports, reports);
+  save(KEYS.actions, []);
+  save(KEYS.workstreams, workstreams);
+  save(KEYS.initd, true);
+  renderAll();
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+/* =====================================================
+   CADENCE LOGIC
+   ===================================================== */
+const CADENCE_DAYS = { weekly: 7, biweekly: 14, monthly: 30, quarterly: 90, adhoc: 9999 };
+
+function daysSince(dateStr) {
+  if (!dateStr) return null;
+  const d = new Date(dateStr); const today = new Date();
+  return Math.floor((today - d) / (1000*60*60*24));
+}
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  const d = new Date(dateStr); const today = new Date();
+  return Math.ceil((d - today) / (1000*60*60*24));
+}
+function cadenceStatus(entity) {
+  const expected = CADENCE_DAYS[entity.cadence] || 9999;
+  const since = daysSince(entity.lastMeeting);
+  if (entity.cadence === 'adhoc') return 'grey';
+  if (since === null) return 'grey';
+  if (since > expected * 1.3) return 'red';
+  if (since > expected) return 'amber';
+  return 'green';
+}
+
+/* =====================================================
+   RENDERING
+   ===================================================== */
+function renderAll() {
+  renderHeader();
+  renderDashboard();
+  renderForums();
+  renderSynks();
+  renderReports();
+  renderActions();
+  renderWeek();
+  renderWorkstreamsEditor();
+  populateWorkstreamSelects();
+  populateActionEntityFilter();
+}
+
+function renderHeader() {
+  const now = new Date();
+  const days = ['Söndag','Måndag','Tisdag','Onsdag','Torsdag','Fredag','Lördag'];
+  const months = ['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'];
+  document.getElementById('today-date').textContent = `${days[now.getDay()]} · ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+  document.getElementById('today-time').textContent = `Vecka ${getISOWeek(now)} · ${now.toTimeString().slice(0,5)}`;
+}
+
+function getISOWeek(d) {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1));
+  return Math.ceil((((date - yearStart) / 86400000) + 1)/7);
+}
+
+function renderDashboard() {
+  const forums = loadArr(KEYS.forums);
+  const synks = loadArr(KEYS.synks);
+  const reports = loadArr(KEYS.reports);
+  const actions = loadArr(KEYS.actions);
+
+  // Metrics
+  document.getElementById('metric-forums').textContent = forums.length;
+  document.getElementById('metric-synks').textContent = synks.length;
+  document.getElementById('metric-reports').textContent = reports.length;
+  document.getElementById('metric-actions').textContent = actions.filter(a => !a.done).length;
+  document.getElementById('metric-forums-overdue').textContent = forums.filter(f => cadenceStatus(f) === 'red').length;
+  document.getElementById('metric-synks-overdue').textContent = synks.filter(s => cadenceStatus(s) === 'red').length;
+  document.getElementById('metric-reports-overdue').textContent = reports.filter(r => cadenceStatus(r) === 'red').length;
+  document.getElementById('metric-actions-blocking').textContent = actions.filter(a => !a.done && a.priority === 'high').length;
+
+  // Today summary
+  const all = [...forums, ...synks, ...reports];
+  const overdue = all.filter(e => cadenceStatus(e) === 'red').length;
+  const upcoming = all.filter(e => { const d = daysUntil(e.nextMeeting); return d !== null && d >= 0 && d <= 7; }).length;
+  document.getElementById('today-summary').innerHTML =
+    `<span class="text-slate-300">${overdue}</span> entiteter i rött · <span class="text-slate-300">${upcoming}</span> möten kommande 7 dagar · <span class="text-slate-300">${actions.filter(a => !a.done).length}</span> öppna actions`;
+
+  // Top 5
+  const top5 = computeTop5();
+  document.getElementById('top5-list').innerHTML = top5.map((item, i) => `
+    <li class="flex items-start gap-3">
+      <span class="font-mono text-xs mt-0.5" style="color: var(--teal-2);">${String(i+1).padStart(2,'0')}</span>
+      <div class="flex-1 min-w-0">
+        <div class="text-slate-100">${escapeHtml(item.text)}</div>
+        <div class="text-xs text-slate-500 mt-0.5">${escapeHtml(item.reason)}</div>
+      </div>
+    </li>
+  `).join('') || '<li class="text-slate-500 text-sm">Inga prioriterade actions just nu — dags att tagga några i Actions-fliken.</li>';
+
+  // Cadence grid
+  const cadenceItems = [...forums, ...synks].sort((a,b) => {
+    const order = { red: 0, amber: 1, green: 2, grey: 3 };
+    return order[cadenceStatus(a)] - order[cadenceStatus(b)];
+  });
+  document.getElementById('cadence-grid').innerHTML = cadenceItems.map(e => {
+    const status = cadenceStatus(e);
+    const since = daysSince(e.lastMeeting);
+    const sinceText = since === null ? '—' : (since === 0 ? 'idag' : `${since}d`);
+    return `<div class="panel-tight rounded p-2 flex items-center gap-2">
+      <span class="dot dot-${status}"></span>
+      <div class="flex-1 min-w-0">
+        <div class="text-xs text-slate-200 truncate">${escapeHtml(e.name)}</div>
+        <div class="font-mono text-[10px] text-slate-500">${e.cadence} · senast ${sinceText}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Workstream bars
+  const workstreams = loadArr(KEYS.workstreams);
+  const counts = {};
+  workstreams.forEach(w => counts[w] = 0);
+  [...forums, ...synks, ...reports].forEach(e => {
+    if (e.workstream && counts[e.workstream] !== undefined) counts[e.workstream]++;
+  });
+  const max = Math.max(1, ...Object.values(counts));
+  document.getElementById('workstream-bars').innerHTML = Object.entries(counts).sort((a,b) => b[1]-a[1]).map(([name, count]) => `
+    <div>
+      <div class="flex justify-between text-xs mb-1">
+        <span class="text-slate-300">${escapeHtml(name)}</span>
+        <span class="font-mono text-slate-500">${count}</span>
+      </div>
+      <div class="h-2 rounded bg-white/5 overflow-hidden">
+        <div class="h-full rounded" style="width: ${(count/max*100)}%; background: linear-gradient(90deg, var(--teal), var(--teal-2));"></div>
+      </div>
+    </div>
+  `).join('');
+
+  // Heads-up
+  const headsUp = [];
+  all.forEach(e => {
+    if (cadenceStatus(e) === 'red') {
+      const since = daysSince(e.lastMeeting);
+      headsUp.push({ severity: 'red', text: `${e.name} — ingen sync på ${since}d (cadence: ${e.cadence})` });
+    }
+  });
+  actions.filter(a => !a.done && a.dueDate).forEach(a => {
+    const d = daysUntil(a.dueDate);
+    if (d !== null && d < 0) headsUp.push({ severity: 'red', text: `Action försenad: ${a.title} (${Math.abs(d)}d sedan deadline)` });
+    else if (d !== null && d <= 2 && a.priority === 'high') headsUp.push({ severity: 'amber', text: `Hög-prio action: ${a.title} (om ${d}d)` });
+  });
+  document.getElementById('heads-up-list').innerHTML = headsUp.length ? headsUp.slice(0,8).map(h => `
+    <div class="flex items-start gap-3 p-3 panel-tight rounded">
+      <div class="accent-bar ${h.severity === 'red' ? 'accent-bar-red' : 'accent-bar-orange'}" style="height: 24px;"></div>
+      <div class="text-sm text-slate-200">${escapeHtml(h.text)}</div>
+    </div>
+  `).join('') : '<div class="text-sm text-slate-500">Inget brinner just nu.</div>';
+}
+
+function computeTop5() {
+  const actions = loadArr(KEYS.actions).filter(a => !a.done);
+  const all = [...loadArr(KEYS.forums), ...loadArr(KEYS.synks), ...loadArr(KEYS.reports)];
+  const items = [];
+
+  actions.forEach(a => {
+    let score = 0;
+    let reason = [];
+    if (a.priority === 'high') { score += 30; reason.push('hög prio'); }
+    else if (a.priority === 'medium') { score += 15; }
+    if (a.dueDate) {
+      const d = daysUntil(a.dueDate);
+      if (d !== null) {
+        if (d < 0) { score += 50; reason.push(`${Math.abs(d)}d försenad`); }
+        else if (d <= 2) { score += 35; reason.push(`om ${d}d`); }
+        else if (d <= 7) { score += 15; reason.push(`om ${d}d`); }
+      }
+    }
+    const ent = all.find(e => e.id === a.entityId);
+    if (ent) reason.push(ent.name);
+    items.push({ text: a.title, score, reason: reason.join(' · ') || 'öppen' });
+  });
+
+  // Add overdue cadence as "implicit" actions
+  all.forEach(e => {
+    if (cadenceStatus(e) === 'red') {
+      const since = daysSince(e.lastMeeting);
+      items.push({
+        text: `Boka in sync med ${e.name}`,
+        score: 25 + Math.min(20, since / 5),
+        reason: `senast ${since}d sedan · cadence ${e.cadence}`
+      });
+    }
+  });
+
+  return items.sort((a,b) => b.score - a.score).slice(0, 5);
+}
+
+/* =====================================================
+   FORUMS / SYNKS / REPORTS LISTS
+   ===================================================== */
+function entityRowHtml(e, type) {
+  const status = cadenceStatus(e);
+  const since = daysSince(e.lastMeeting);
+  const until = daysUntil(e.nextMeeting);
+  const actions = loadArr(KEYS.actions).filter(a => a.entityId === e.id && !a.done);
+  return `
+    <details class="panel rounded-lg group">
+      <summary class="p-4 flex items-center gap-4 row-hover">
+        <span class="dot dot-${status}"></span>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="font-display text-base font-semibold">${escapeHtml(e.name)}</h3>
+            ${e.role ? `<span class="pill status-grey">${escapeHtml(e.role)}</span>` : ''}
+            ${e.workstream ? `<span class="pill status-grey">${escapeHtml(e.workstream)}</span>` : ''}
+            ${actions.length ? `<span class="pill ${status === 'red' ? 'status-red' : 'status-amber'}">${actions.length} action${actions.length>1?'s':''}</span>` : ''}
+          </div>
+          <div class="text-xs text-slate-400 mt-1 truncate">${escapeHtml(e.responsibility || '—')}</div>
+        </div>
+        <div class="hidden md:block text-right">
+          <div class="font-mono text-xs text-slate-300">${until !== null ? (until < 0 ? `försenat ${Math.abs(until)}d` : until === 0 ? 'idag' : `om ${until}d`) : '—'}</div>
+          <div class="font-mono text-[10px] text-slate-500">senast: ${since === null ? '—' : since + 'd sedan'}</div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </summary>
+      <div class="px-4 pb-4 border-t hairline pt-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 text-sm">
+          <div>
+            <div class="label-xs mb-1">Cadence</div>
+            <div class="text-slate-200">${cadenceLabel(e.cadence)}</div>
+          </div>
+          <div>
+            <div class="label-xs mb-1">Senast genomförd</div>
+            <div class="font-mono text-slate-200">${e.lastMeeting || '—'}</div>
+          </div>
+          <div>
+            <div class="label-xs mb-1">Nästa möte</div>
+            <div class="font-mono text-slate-200">${e.nextMeeting || '—'}</div>
+          </div>
+        </div>
+        ${e.notes ? `<div class="mb-4"><div class="label-xs mb-1">Anteckningar</div><div class="text-sm text-slate-300 whitespace-pre-wrap">${escapeHtml(e.notes)}</div></div>` : ''}
+
+        <div class="mb-4">
+          <div class="flex items-center justify-between mb-2">
+            <div class="label-xs">Öppna actions kopplade hit</div>
+            <button onclick="event.preventDefault(); openActionModal(null, '${e.id}')" class="btn btn-ghost text-xs">+ Lägg till</button>
+          </div>
+          ${actions.length ? `<div class="space-y-1">${actions.map(a => `
+            <div class="flex items-center gap-3 panel-tight rounded p-2">
+              <input type="checkbox" onchange="toggleAction('${a.id}')" class="accent-teal-500">
+              <div class="flex-1 text-sm">${escapeHtml(a.title)}</div>
+              <span class="font-mono text-[10px] text-slate-500">${a.dueDate || '—'}</span>
+            </div>
+          `).join('')}</div>` : '<div class="text-xs text-slate-500">Inga öppna actions.</div>'}
+        </div>
+
+        <div class="flex gap-2 pt-2 border-t hairline">
+          <button onclick="event.preventDefault(); markMeetingDone('${type}','${e.id}')" class="btn btn-primary text-xs">Markera möte genomfört idag</button>
+          <button onclick="event.preventDefault(); openEntityModal('${type}', '${e.id}')" class="btn btn-ghost text-xs">Redigera</button>
+        </div>
+      </div>
+    </details>
+  `;
+}
+
+function cadenceLabel(c) {
+  return ({ weekly: 'Veckovis', biweekly: 'Varannan vecka', monthly: 'Månadsvis', quarterly: 'Kvartalsvis', adhoc: 'Ad hoc' })[c] || c;
+}
+
+function renderForums() {
+  const forums = loadArr(KEYS.forums).sort((a,b) => {
+    const order = { red: 0, amber: 1, green: 2, grey: 3 };
+    return order[cadenceStatus(a)] - order[cadenceStatus(b)];
+  });
+  document.getElementById('forums-list').innerHTML = forums.map(f => entityRowHtml(f, 'forum')).join('') ||
+    '<div class="panel rounded-lg p-8 text-center text-slate-500">Inga forum ännu. Klicka "+ Nytt forum" för att börja, eller "Återställ till mall" i Inställningar.</div>';
+}
+
+function renderSynks() {
+  const synks = loadArr(KEYS.synks).sort((a,b) => {
+    const order = { red: 0, amber: 1, green: 2, grey: 3 };
+    return order[cadenceStatus(a)] - order[cadenceStatus(b)];
+  });
+  document.getElementById('synks-list').innerHTML = synks.map(s => entityRowHtml(s, 'synk')).join('') ||
+    '<div class="panel rounded-lg p-8 text-center text-slate-500">Inga synkar ännu.</div>';
+}
+
+function renderReports() {
+  const reports = loadArr(KEYS.reports);
+  document.getElementById('reports-list').innerHTML = reports.map(r => {
+    const status = cadenceStatus(r);
+    const until = daysUntil(r.nextMeeting);
+    const actions = loadArr(KEYS.actions).filter(a => a.entityId === r.id && !a.done);
+    return `
+      <div class="panel rounded-lg p-4 flex flex-col">
+        <div class="flex items-start justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="dot dot-${status}"></span>
+            <h3 class="font-display text-lg font-semibold">${escapeHtml(r.name)}</h3>
+          </div>
+          <button onclick="openEntityModal('report','${r.id}')" class="text-slate-500 hover:text-white text-xs">Redigera</button>
+        </div>
+        ${r.role ? `<div class="text-xs text-slate-400 mb-3">${escapeHtml(r.role)}</div>` : ''}
+        <div class="text-xs space-y-1 mb-3">
+          <div class="flex justify-between"><span class="text-slate-500">Nästa 1:1</span><span class="font-mono">${until !== null ? (until < 0 ? `försenat ${Math.abs(until)}d` : `om ${until}d`) : '—'}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Cadence</span><span class="font-mono">${cadenceLabel(r.cadence)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Öppna actions</span><span class="font-mono">${actions.length}</span></div>
+        </div>
+        <button onclick="markMeetingDone('report','${r.id}')" class="btn btn-ghost text-xs mt-auto">1:1 genomfört</button>
+      </div>
+    `;
+  }).join('') || '<div class="panel rounded-lg p-8 text-center text-slate-500 col-span-full">Inga direktrapporterande ännu.</div>';
+}
+
+/* =====================================================
+   ACTIONS
+   ===================================================== */
+function renderActions() {
+  const actions = loadArr(KEYS.actions);
+  const all = [...loadArr(KEYS.forums), ...loadArr(KEYS.synks), ...loadArr(KEYS.reports)];
+  const filterStatus = document.getElementById('action-filter-status').value;
+  const filterEntity = document.getElementById('action-filter-entity').value;
+
+  let filtered = actions;
+  if (filterStatus === 'open') filtered = filtered.filter(a => !a.done);
+  if (filterStatus === 'done') filtered = filtered.filter(a => a.done);
+  if (filterEntity !== 'all') filtered = filtered.filter(a => a.entityId === filterEntity);
+
+  filtered.sort((a,b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    const ad = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
+    const bd = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
+    return ad - bd;
+  });
+
+  document.getElementById('actions-list').innerHTML = filtered.map(a => {
+    const ent = all.find(e => e.id === a.entityId);
+    const d = a.dueDate ? daysUntil(a.dueDate) : null;
+    let dueClass = 'text-slate-400';
+    let dueText = a.dueDate || '—';
+    if (d !== null && !a.done) {
+      if (d < 0) { dueClass = 'text-red-400'; dueText = `försenat ${Math.abs(d)}d`; }
+      else if (d <= 2) { dueClass = 'text-amber-400'; dueText = d === 0 ? 'idag' : `om ${d}d`; }
+      else { dueText = `om ${d}d`; }
+    }
+    const prioColor = a.priority === 'high' ? 'status-red' : a.priority === 'medium' ? 'status-amber' : 'status-grey';
+    return `
+      <div class="panel-tight rounded p-3 flex items-center gap-3 ${a.done ? 'opacity-50' : ''}">
+        <input type="checkbox" ${a.done ? 'checked' : ''} onchange="toggleAction('${a.id}')" class="accent-teal-500 w-4 h-4">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm ${a.done ? 'line-through text-slate-500' : 'text-slate-100'}">${escapeHtml(a.title)}</div>
+          <div class="flex items-center gap-2 mt-1 flex-wrap">
+            ${ent ? `<span class="pill status-grey">${escapeHtml(ent.name)}</span>` : ''}
+            <span class="pill ${prioColor}">${a.priority}</span>
+            <span class="font-mono text-[10px] ${dueClass}">${dueText}</span>
+          </div>
+        </div>
+        <button onclick="openActionModal('${a.id}')" class="text-slate-500 hover:text-white text-xs">Redigera</button>
+      </div>
+    `;
+  }).join('') || '<div class="panel rounded-lg p-8 text-center text-slate-500">Inga actions matchar filtret.</div>';
+}
+
+function toggleAction(id) {
+  const actions = loadArr(KEYS.actions);
+  const a = actions.find(x => x.id === id);
+  if (a) { a.done = !a.done; a.doneDate = a.done ? new Date().toISOString().split('T')[0] : null; save(KEYS.actions, actions); renderAll(); }
+}
+
+/* =====================================================
+   WEEK VIEW
+   ===================================================== */
+let currentWeekOffset = 0;
+function getWeekKey(offset = 0) {
+  const d = new Date();
+  d.setDate(d.getDate() + offset * 7);
+  return `${d.getFullYear()}-W${getISOWeek(d)}`;
+}
+function changeWeek(delta) {
+  currentWeekOffset += delta;
+  renderWeek();
+}
+function renderWeek() {
+  const weeks = loadObj(KEYS.weeks);
+  const key = getWeekKey(currentWeekOffset);
+  const week = weeks[key] || { plan: '', review: '' };
+  document.getElementById('week-plan').value = week.plan || '';
+  document.getElementById('week-review').value = week.review || '';
+  document.getElementById('week-label').textContent = key;
+
+  // Forums this week
+  const all = [...loadArr(KEYS.forums), ...loadArr(KEYS.synks), ...loadArr(KEYS.reports)];
+  const today = new Date(); today.setDate(today.getDate() + currentWeekOffset * 7);
+  const monday = new Date(today); monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+  const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+  const inWeek = all.filter(e => {
+    if (!e.nextMeeting) return false;
+    const d = new Date(e.nextMeeting);
+    return d >= monday && d <= sunday;
+  }).sort((a,b) => new Date(a.nextMeeting) - new Date(b.nextMeeting));
+
+  document.getElementById('week-forums').innerHTML = inWeek.length ? inWeek.map(e => `
+    <div class="flex items-center gap-3 panel-tight rounded p-2">
+      <span class="font-mono text-xs text-slate-400 w-20">${e.nextMeeting}</span>
+      <span class="dot dot-${cadenceStatus(e)}"></span>
+      <span class="text-sm flex-1">${escapeHtml(e.name)}</span>
+      <span class="text-xs text-slate-500">${escapeHtml(e.role || cadenceLabel(e.cadence))}</span>
+    </div>
+  `).join('') : '<div class="text-xs text-slate-500">Inga registrerade möten denna vecka.</div>';
+}
+function saveWeek() {
+  const weeks = loadObj(KEYS.weeks);
+  const key = getWeekKey(currentWeekOffset);
+  weeks[key] = {
+    plan: document.getElementById('week-plan').value,
+    review: document.getElementById('week-review').value
+  };
+  save(KEYS.weeks, weeks);
+  flashSaved();
+}
+
+/* =====================================================
+   MODALS
+   ===================================================== */
+let editingEntity = null; let editingType = null;
+function openEntityModal(type, id) {
+  editingType = type;
+  const list = type === 'forum' ? loadArr(KEYS.forums) : type === 'synk' ? loadArr(KEYS.synks) : loadArr(KEYS.reports);
+  editingEntity = id ? list.find(e => e.id === id) : null;
+
+  const titles = { forum: 'Forum', synk: 'Operationell synk', report: 'Direktrapporterande' };
+  document.getElementById('entity-modal-title').textContent = (editingEntity ? 'Redigera ' : 'Nytt ') + titles[type];
+  document.getElementById('ent-delete-btn').classList.toggle('hidden', !editingEntity);
+
+  populateWorkstreamSelects();
+
+  document.getElementById('ent-name').value = editingEntity?.name || '';
+  document.getElementById('ent-cadence').value = editingEntity?.cadence || 'weekly';
+  document.getElementById('ent-next').value = editingEntity?.nextMeeting || '';
+  document.getElementById('ent-last').value = editingEntity?.lastMeeting || '';
+  document.getElementById('ent-resp').value = editingEntity?.responsibility || '';
+  document.getElementById('ent-workstream').value = editingEntity?.workstream || '';
+  document.getElementById('ent-role').value = editingEntity?.role || '';
+  document.getElementById('ent-notes').value = editingEntity?.notes || '';
+
+  document.getElementById('entity-modal').classList.remove('hidden');
+}
+function closeEntityModal() {
+  document.getElementById('entity-modal').classList.add('hidden');
+  editingEntity = null; editingType = null;
+}
+function saveEntity() {
+  const key = editingType === 'forum' ? KEYS.forums : editingType === 'synk' ? KEYS.synks : KEYS.reports;
+  const list = loadArr(key);
+  const data = {
+    name: document.getElementById('ent-name').value.trim(),
+    cadence: document.getElementById('ent-cadence').value,
+    nextMeeting: document.getElementById('ent-next').value,
+    lastMeeting: document.getElementById('ent-last').value,
+    responsibility: document.getElementById('ent-resp').value.trim(),
+    workstream: document.getElementById('ent-workstream').value,
+    role: document.getElementById('ent-role').value.trim(),
+    notes: document.getElementById('ent-notes').value.trim()
+  };
+  if (!data.name) { alert('Namn krävs.'); return; }
+  if (editingEntity) {
+    Object.assign(editingEntity, data);
+  } else {
+    list.push({ id: uid(), ...data });
+  }
+  save(key, list);
+  closeEntityModal(); renderAll();
+}
+function deleteEntity() {
+  if (!editingEntity || !confirm('Ta bort?')) return;
+  const key = editingType === 'forum' ? KEYS.forums : editingType === 'synk' ? KEYS.synks : KEYS.reports;
+  save(key, loadArr(key).filter(e => e.id !== editingEntity.id));
+  closeEntityModal(); renderAll();
+}
+function markMeetingDone(type, id) {
+  const key = type === 'forum' ? KEYS.forums : type === 'synk' ? KEYS.synks : KEYS.reports;
+  const list = loadArr(key);
+  const e = list.find(x => x.id === id);
+  if (!e) return;
+  e.lastMeeting = new Date().toISOString().split('T')[0];
+  // Auto-advance next meeting
+  if (e.cadence !== 'adhoc') {
+    const next = new Date(); next.setDate(next.getDate() + (CADENCE_DAYS[e.cadence] || 7));
+    e.nextMeeting = next.toISOString().split('T')[0];
+  }
+  save(key, list); renderAll();
+}
+
+/* ----- Action modal ----- */
+let editingAction = null;
+function openActionModal(id, prefilledEntityId) {
+  const actions = loadArr(KEYS.actions);
+  editingAction = id ? actions.find(a => a.id === id) : null;
+  document.getElementById('action-modal-title').textContent = editingAction ? 'Redigera action' : 'Ny action';
+  document.getElementById('act-delete-btn').classList.toggle('hidden', !editingAction);
+
+  populateActionEntitySelect();
+
+  document.getElementById('act-title').value = editingAction?.title || '';
+  document.getElementById('act-due').value = editingAction?.dueDate || '';
+  document.getElementById('act-priority').value = editingAction?.priority || 'medium';
+  document.getElementById('act-entity').value = editingAction?.entityId || prefilledEntityId || '';
+  document.getElementById('act-notes').value = editingAction?.notes || '';
+
+  document.getElementById('action-modal').classList.remove('hidden');
+}
+function closeActionModal() {
+  document.getElementById('action-modal').classList.add('hidden');
+  editingAction = null;
+}
+function saveAction() {
+  const actions = loadArr(KEYS.actions);
+  const data = {
+    title: document.getElementById('act-title').value.trim(),
+    dueDate: document.getElementById('act-due').value,
+    priority: document.getElementById('act-priority').value,
+    entityId: document.getElementById('act-entity').value,
+    notes: document.getElementById('act-notes').value.trim()
+  };
+  if (!data.title) { alert('Titel krävs.'); return; }
+  if (editingAction) {
+    Object.assign(editingAction, data);
+  } else {
+    actions.push({ id: uid(), done: false, createdAt: new Date().toISOString(), ...data });
+  }
+  save(KEYS.actions, actions);
+  closeActionModal(); renderAll();
+}
+function deleteAction() {
+  if (!editingAction || !confirm('Ta bort action?')) return;
+  save(KEYS.actions, loadArr(KEYS.actions).filter(a => a.id !== editingAction.id));
+  closeActionModal(); renderAll();
+}
+
+/* =====================================================
+   WORKSTREAMS
+   ===================================================== */
+function renderWorkstreamsEditor() {
+  const workstreams = loadArr(KEYS.workstreams);
+  document.getElementById('workstreams-editor').innerHTML = workstreams.map(w => `
+    <span class="pill status-grey flex items-center gap-2">
+      ${escapeHtml(w)}
+      <button onclick="removeWorkstream('${escapeAttr(w)}')" class="text-slate-500 hover:text-red-400">×</button>
+    </span>
+  `).join('') || '<span class="text-xs text-slate-500">Inga workstreams definierade.</span>';
+}
+function addWorkstream() {
+  const input = document.getElementById('new-workstream');
+  const v = input.value.trim();
+  if (!v) return;
+  const workstreams = loadArr(KEYS.workstreams);
+  if (!workstreams.includes(v)) workstreams.push(v);
+  save(KEYS.workstreams, workstreams);
+  input.value = '';
+  renderWorkstreamsEditor(); populateWorkstreamSelects();
+}
+function removeWorkstream(name) {
+  if (!confirm(`Ta bort workstream "${name}"?`)) return;
+  save(KEYS.workstreams, loadArr(KEYS.workstreams).filter(w => w !== name));
+  renderWorkstreamsEditor(); populateWorkstreamSelects(); renderDashboard();
+}
+function populateWorkstreamSelects() {
+  const workstreams = loadArr(KEYS.workstreams);
+  const sel = document.getElementById('ent-workstream');
+  if (sel) sel.innerHTML = '<option value="">— ingen —</option>' + workstreams.map(w => `<option value="${escapeAttr(w)}">${escapeHtml(w)}</option>`).join('');
+}
+function populateActionEntitySelect() {
+  const all = [
+    { group: 'Forum', items: loadArr(KEYS.forums) },
+    { group: 'Op. synkar', items: loadArr(KEYS.synks) },
+    { group: 'Direktrapp.', items: loadArr(KEYS.reports) }
+  ];
+  document.getElementById('act-entity').innerHTML = '<option value="">— ingen koppling —</option>' +
+    all.map(g => `<optgroup label="${g.group}">${g.items.map(e => `<option value="${e.id}">${escapeHtml(e.name)}</option>`).join('')}</optgroup>`).join('');
+}
+function populateActionEntityFilter() {
+  const all = [...loadArr(KEYS.forums), ...loadArr(KEYS.synks), ...loadArr(KEYS.reports)];
+  const sel = document.getElementById('action-filter-entity');
+  const current = sel.value;
+  sel.innerHTML = '<option value="all">Alla entiteter</option>' + all.map(e => `<option value="${e.id}">${escapeHtml(e.name)}</option>`).join('');
+  sel.value = current || 'all';
+}
+
+/* =====================================================
+   AI BRIEFING
+   ===================================================== */
+async function generateBriefing() {
+  const apiKey = localStorage.getItem(KEYS.apiKey);
+  if (!apiKey) {
+    alert('Lägg in din Anthropic API-nyckel under Inställningar först.');
+    return;
+  }
+  const box = document.getElementById('ai-briefing');
+  const txt = document.getElementById('ai-briefing-text');
+  box.classList.remove('hidden');
+  txt.textContent = 'Genererar briefing…';
+
+  const forums = loadArr(KEYS.forums);
+  const synks = loadArr(KEYS.synks);
+  const reports = loadArr(KEYS.reports);
+  const actions = loadArr(KEYS.actions).filter(a => !a.done);
+
+  const overdue = [...forums, ...synks, ...reports].filter(e => cadenceStatus(e) === 'red');
+  const upcoming = [...forums, ...synks, ...reports].filter(e => { const d = daysUntil(e.nextMeeting); return d !== null && d >= 0 && d <= 7; });
+
+  const context = {
+    today: new Date().toISOString().split('T')[0],
+    overdue: overdue.map(e => ({ name: e.name, daysSince: daysSince(e.lastMeeting), cadence: e.cadence })),
+    upcoming: upcoming.map(e => ({ name: e.name, when: e.nextMeeting, responsibility: e.responsibility })),
+    openActions: actions.map(a => ({ title: a.title, due: a.dueDate, priority: a.priority }))
+  };
+
+  const prompt = `Du är en stabschef för Anders Rönnquist, CRO på Arctic Group AB (under merger med ID North, projektnamn Northstar).
+
+Här är dagens läge:
+${JSON.stringify(context, null, 2)}
+
+Skriv en kort briefing (max 150 ord) på svenska som:
+1. Identifierar de 2-3 viktigaste sakerna att fokusera på idag
+2. Påpekar eventuella mönster (t.ex. "tre partner-relaterade forum är försenade")
+3. Ger en konkret rekommendation om vad som bör skippas/delegeras
+
+Sober, direkt, ingen smörja. Inga inledningsfraser som "Här kommer din briefing".`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 600,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await resp.json();
+    if (data.error) { txt.textContent = 'Fel: ' + data.error.message; return; }
+    txt.textContent = data.content.map(c => c.text || '').join('\n');
+  } catch (e) {
+    txt.textContent = 'Fel: ' + e.message;
+  }
+}
+
+function saveApiKey() {
+  const v = document.getElementById('api-key').value.trim();
+  if (v) localStorage.setItem(KEYS.apiKey, v);
+  else localStorage.removeItem(KEYS.apiKey);
+  flashSaved();
+}
+
+/* =====================================================
+   OUTLOOK SCREENSHOT IMPORT
+   ===================================================== */
+let outlookImageBase64 = null;
+let outlookImageMime = null;
+let outlookProposals = []; // Array of { meetingTitle, dateISO, time, suggestedEntityId, suggestedConfidence, accept }
+
+function setupOutlookDropzone() {
+  const zone = document.getElementById('outlook-dropzone');
+  if (!zone) return;
+  zone.addEventListener('click', () => document.getElementById('outlook-file').click());
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('border-teal-500/60'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('border-teal-500/60'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('border-teal-500/60');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) loadOutlookImage(file);
+  });
+
+  // Paste anywhere when on Week tab
+  document.addEventListener('paste', e => {
+    const weekTabActive = !document.getElementById('tab-week').classList.contains('hidden');
+    if (!weekTabActive) return;
+    const item = [...e.clipboardData.items].find(i => i.type.startsWith('image/'));
+    if (!item) return;
+    const file = item.getAsFile();
+    if (file) loadOutlookImage(file);
+  });
+}
+
+function handleOutlookFile(event) {
+  const file = event.target.files[0];
+  if (file) loadOutlookImage(file);
+  event.target.value = '';
+}
+
+function loadOutlookImage(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    outlookImageMime = file.type || 'image/png';
+    outlookImageBase64 = dataUrl.split(',')[1];
+    document.getElementById('outlook-image').src = dataUrl;
+    document.getElementById('outlook-preview').classList.remove('hidden');
+    document.getElementById('outlook-status').textContent = '';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearOutlookImage() {
+  outlookImageBase64 = null;
+  outlookImageMime = null;
+  document.getElementById('outlook-image').src = '';
+  document.getElementById('outlook-preview').classList.add('hidden');
+  document.getElementById('outlook-status').textContent = '';
+}
+
+async function parseOutlookImage() {
+  const apiKey = localStorage.getItem(KEYS.apiKey);
+  if (!apiKey) {
+    alert('Lägg in din Anthropic API-nyckel under Inställningar först.');
+    return;
+  }
+  if (!outlookImageBase64) { alert('Ingen bild laddad.'); return; }
+
+  const status = document.getElementById('outlook-status');
+  status.innerHTML = '<span class="pulse-soft">Läser bild med AI…</span>';
+
+  // Build entity catalogue for matching context
+  const allEntities = [
+    ...loadArr(KEYS.forums).map(e => ({ ...e, _type: 'forum' })),
+    ...loadArr(KEYS.synks).map(e => ({ ...e, _type: 'synk' })),
+    ...loadArr(KEYS.reports).map(e => ({ ...e, _type: 'report' }))
+  ];
+  const catalogue = allEntities.map(e => ({
+    id: e.id,
+    type: e._type,
+    name: e.name,
+    role: e.role || '',
+    responsibility: e.responsibility || ''
+  }));
+
+  const today = new Date();
+  const todayISO = today.toISOString().split('T')[0];
+
+  const prompt = `Du analyserar en skärmdump av Anders Rönnquists Outlook-kalender.
+Idag är ${todayISO}. Veckodag: ${['söndag','måndag','tisdag','onsdag','torsdag','fredag','lördag'][today.getDay()]}.
+
+Extrahera ALLA mötesposter du ser i bilden. Returnera ENDAST giltig JSON enligt schemat:
+
+{
+  "meetings": [
+    {
+      "title": "exakt titel som visas i Outlook",
+      "date": "YYYY-MM-DD",
+      "time": "HH:MM" eller null,
+      "matchedEntityId": "id från katalogen nedan, eller null om ingen matchar",
+      "confidence": "high" | "medium" | "low",
+      "matchReason": "kort förklaring på svenska, max 12 ord"
+    }
+  ]
+}
+
+Matchningsregler:
+- Matcha mötesnamnet mot entiteter i katalogen baserat på namn, roll och ansvar.
+- "1:1 Sofie" → matcha mot Sofie B (direktrapporterande).
+- "Northstar workstream" → matcha mot Northstar workstreams forumet.
+- "CFO sync" → matcha mot CFO operationella synk.
+- Om du är osäker, sätt confidence="low" eller matchedEntityId=null.
+- Använd EXAKT id-strängen från katalogen.
+- Ta INTE med privata/personliga möten (lunch, gym, läkare etc.) — sätt matchedEntityId=null för dem.
+
+Datum:
+- Om endast veckodag syns, beräkna datum baserat på att idag är ${todayISO}.
+- Endast datum inom kommande 14 dagar.
+
+Katalog över entiteter:
+${JSON.stringify(catalogue, null, 2)}
+
+Returnera ENBART JSON, inga inledande/avslutande texter, inga markdown-fence.`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: outlookImageMime, data: outlookImageBase64 } },
+            { type: 'text', text: prompt }
+          ]
+        }]
+      })
+    });
+    const data = await resp.json();
+    if (data.error) {
+      status.innerHTML = '<span class="text-red-400">Fel: ' + escapeHtml(data.error.message) + '</span>';
+      return;
+    }
+    const text = data.content.map(c => c.text || '').join('').trim();
+    // Strip ```json fences if present
+    const clean = text.replace(/^```json\s*/i, '').replace(/^```\s*/, '').replace(/```\s*$/, '').trim();
+    let parsed;
+    try {
+      parsed = JSON.parse(clean);
+    } catch (e) {
+      status.innerHTML = '<span class="text-red-400">Kunde inte tolka AI-svar som JSON.</span>';
+      console.error('AI response:', text);
+      return;
+    }
+
+    if (!parsed.meetings || !parsed.meetings.length) {
+      status.innerHTML = '<span class="text-amber-400">Inga möten hittade i bilden.</span>';
+      return;
+    }
+
+    outlookProposals = parsed.meetings.map(m => ({
+      title: m.title || '(namnlös)',
+      date: m.date || '',
+      time: m.time || '',
+      suggestedEntityId: m.matchedEntityId || '',
+      confidence: m.confidence || 'low',
+      matchReason: m.matchReason || '',
+      accept: !!m.matchedEntityId // default: accept if matched
+    }));
+    status.innerHTML = `<span class="text-teal-400">${outlookProposals.length} möten hittade</span>`;
+    openOutlookReview();
+  } catch (e) {
+    status.innerHTML = '<span class="text-red-400">Fel: ' + escapeHtml(e.message) + '</span>';
+  }
+}
+
+function openOutlookReview() {
+  renderOutlookReview();
+  document.getElementById('outlook-review-modal').classList.remove('hidden');
+}
+function closeOutlookReview() {
+  document.getElementById('outlook-review-modal').classList.add('hidden');
+}
+
+function renderOutlookReview() {
+  const allEntities = [
+    ...loadArr(KEYS.forums).map(e => ({ ...e, _type: 'forum', _label: 'Forum' })),
+    ...loadArr(KEYS.synks).map(e => ({ ...e, _type: 'synk', _label: 'Synk' })),
+    ...loadArr(KEYS.reports).map(e => ({ ...e, _type: 'report', _label: '1:1' }))
+  ];
+  const optsHtml = ['<option value="">— ingen koppling (hoppa över) —</option>']
+    .concat(['forum','synk','report'].map(t => {
+      const items = allEntities.filter(e => e._type === t);
+      const label = items[0]?._label || t;
+      return `<optgroup label="${label}">${items.map(e => `<option value="${e.id}">${escapeHtml(e.name)}</option>`).join('')}</optgroup>`;
+    })).join('');
+
+  const list = document.getElementById('outlook-review-list');
+  list.innerHTML = outlookProposals.map((p, i) => {
+    const confColor = p.confidence === 'high' ? 'status-green' : p.confidence === 'medium' ? 'status-amber' : 'status-red';
+    return `
+      <div class="panel-tight rounded p-3">
+        <div class="flex items-start gap-3">
+          <input type="checkbox" ${p.accept ? 'checked' : ''} onchange="toggleProposal(${i})" class="accent-teal-500 mt-1 w-4 h-4">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap mb-1">
+              <span class="font-mono text-[11px] text-slate-300">${escapeHtml(p.date)}${p.time ? ' · ' + escapeHtml(p.time) : ''}</span>
+              <span class="pill ${confColor}">${p.confidence}</span>
+            </div>
+            <div class="text-sm text-slate-100 mb-1">${escapeHtml(p.title)}</div>
+            ${p.matchReason ? `<div class="text-[11px] text-slate-500 mb-2 italic">AI: ${escapeHtml(p.matchReason)}</div>` : ''}
+            <div class="flex items-center gap-2">
+              <span class="label-xs">Koppla till →</span>
+              <select onchange="updateProposalEntity(${i}, this.value)" class="flex-1 text-xs">
+                ${optsHtml.replace(`value="${p.suggestedEntityId}"`, `value="${p.suggestedEntityId}" selected`)}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  updateOutlookSummary();
+}
+
+function toggleProposal(i) {
+  outlookProposals[i].accept = !outlookProposals[i].accept;
+  updateOutlookSummary();
+}
+
+function updateProposalEntity(i, v) {
+  outlookProposals[i].suggestedEntityId = v;
+  // Auto-uncheck if no entity, auto-check if user picks one manually
+  outlookProposals[i].accept = !!v;
+  renderOutlookReview();
+}
+
+function updateOutlookSummary() {
+  const accepted = outlookProposals.filter(p => p.accept && p.suggestedEntityId).length;
+  document.getElementById('outlook-review-summary').textContent =
+    `${accepted} av ${outlookProposals.length} valda att tillämpa`;
+}
+
+function applyOutlookReview() {
+  const toApply = outlookProposals.filter(p => p.accept && p.suggestedEntityId);
+  if (!toApply.length) { closeOutlookReview(); return; }
+
+  const todayISO = new Date().toISOString().split('T')[0];
+  let updatedCount = 0;
+  let pastMarkedCount = 0;
+
+  ['forums','synks','reports'].forEach(bucket => {
+    const list = loadArr(KEYS[bucket]);
+    let dirty = false;
+    toApply.forEach(p => {
+      const ent = list.find(e => e.id === p.suggestedEntityId);
+      if (!ent) return;
+      if (p.date < todayISO) {
+        // Past meeting → log as last meeting
+        if (!ent.lastMeeting || p.date > ent.lastMeeting) {
+          ent.lastMeeting = p.date;
+          pastMarkedCount++;
+          dirty = true;
+        }
+      } else {
+        // Future meeting → set as next meeting (earliest wins if multiple)
+        if (!ent.nextMeeting || p.date < ent.nextMeeting) {
+          ent.nextMeeting = p.date;
+          updatedCount++;
+          dirty = true;
+        }
+      }
+    });
+    if (dirty) save(KEYS[bucket], list);
+  });
+
+  closeOutlookReview();
+  clearOutlookImage();
+  outlookProposals = [];
+  renderAll();
+  flashSaved(`✓ ${updatedCount} möten framåt · ${pastMarkedCount} loggade som genomförda`);
+}
+
+/* =====================================================
+   IMPORT / EXPORT
+   ===================================================== */
+function exportData() {
+  const dump = {};
+  Object.entries(KEYS).forEach(([k, key]) => {
+    if (k === 'apiKey') return;
+    const v = localStorage.getItem(key);
+    if (v) dump[k] = JSON.parse(v);
+  });
+  const blob = new Blob([JSON.stringify(dump, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `cro-os-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+}
+function importData(event) {
+  const file = event.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!confirm('Detta ersätter all data. Fortsätt?')) return;
+      Object.entries(data).forEach(([k, v]) => { if (KEYS[k]) save(KEYS[k], v); });
+      renderAll();
+      flashSaved();
+    } catch (err) { alert('Kunde inte läsa fil: ' + err.message); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+function resetAll() {
+  if (!confirm('RADERA all CRO OS-data? Detta går inte att ångra.')) return;
+  Object.values(KEYS).forEach(k => localStorage.removeItem(k));
+  location.reload();
+}
+
+/* =====================================================
+   HELPERS
+   ===================================================== */
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+function flashSaved(msg) {
+  const el = document.createElement('div');
+  el.className = 'fixed bottom-6 right-6 panel rounded-lg px-4 py-2 text-sm fade-in';
+  el.style.borderColor = 'var(--teal)';
+  el.textContent = msg || '✓ Sparat';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2400);
+}
+
+/* =====================================================
+   TABS
+   ===================================================== */
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => { b.classList.remove('tab-active'); b.classList.add('text-slate-400'); });
+    btn.classList.add('tab-active'); btn.classList.remove('text-slate-400');
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+    document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
+  });
+});
+
+/* =====================================================
+   AUTO-SAVE WEEK
+   ===================================================== */
+['week-plan','week-review'].forEach(id => {
+  document.addEventListener('input', e => {
+    if (e.target.id === id) {
+      clearTimeout(window._weekSaveTimer);
+      window._weekSaveTimer = setTimeout(saveWeek, 800);
+    }
+  });
+});
+
+/* =====================================================
+   INIT
+   ===================================================== */
+function init() {
+  if (!localStorage.getItem(KEYS.initd)) seedDemoData();
+  const ak = localStorage.getItem(KEYS.apiKey);
+  if (ak) document.getElementById('api-key').value = ak;
+  renderAll();
+  setupOutlookDropzone();
+  setInterval(renderHeader, 30000);
+}
+init();
+</script>
+</body>
+</html>
